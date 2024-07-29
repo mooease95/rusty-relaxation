@@ -1,7 +1,10 @@
 mod sequential_relaxer;
+// mod relaxation_problem;
 
 fn main() {
     println!("Starting rusty relaxation.");
 
-    sequential_relaxer::relax();
+    if sequential_relaxer::relax() {
+        println!("Managed to call sequential relaxer!");
+    }
 }
