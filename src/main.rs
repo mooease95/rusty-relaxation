@@ -1,4 +1,5 @@
 mod sequential_relaxer;
+mod relaxation_utils;
 // mod relaxation_problem;
 
 fn main() {

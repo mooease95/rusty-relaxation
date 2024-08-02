@@ -44,10 +44,19 @@ pub fn relax() -> bool {
             for column in 0..size {
                 println!("{}", new_array_to_relax[row][column]) // This only prints a number so does not need a :?.
                 // TODO: Do the average here and continue. <=== WORK HERE!!!
+                /*
+                double newAvgValue = RelaxerUtils.averageArray(newArrayToRelax, row, column);
+                arrayToRelax[row][column] = newAvgValue;
+                boolean precisionReachedForCurrentValue = RelaxerUtils.checkPrecision(relaxableArray, newAvgValue, row, column, targetPrecision);
+                if (!precisionReachedForCurrentValue) {
+                   needsAnotherIteration = true; // if we haven't reached precision, we need another iteration
+                }
+                 */
+
+                let mut new_avg_value =
             }
         }
     }
-
 
     return true;
 }
