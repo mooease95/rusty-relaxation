@@ -1,33 +1,20 @@
 
 use crate::relaxation_utils as utils;
+use crate::relaxation_context::RelaxationContext;
+use crate::initialiser;
 
-pub fn relax() -> bool {
+pub fn relax(context: RelaxationContext) -> bool {
     println!("Starting to relax sequentially.");
 
-    // =============================================
-    // Let's start off with a 4x4 array.
-    // f(x,y) = x + y
-    //
-    //      0   1   2   3
-    // -------------------
-    // 0 |  0   1   2   3
-    // 1 |  1   0   0   4
-    // 2 |  2   0   0   5
-    // 3 |  3   4   5   6
-    // =============================================
-
-    let correct_array: [[f64; 4]; 4] = [[0.0, 1.0, 2.0, 3.0], [1.0, 2.0, 3.0, 4.0], [2.0, 3.0, 4.0, 5.0], [3.0, 4.0, 5.0, 6.0]];
-    let target_precision: f64 = 0.1;
-
     println!("Correct array:");
-    for n in 0..correct_array.len() {
-        println!("{:?}", correct_array[n]);
+    for n in 0..context.array_size {
+        println!("{:?}", context.correct_array[usize::from(n)]);
     }
 
-    println!("Target precision=[{}].", target_precision);
+    println!("Target precision=[{}].", context.target_precision);
 
-    let mut input_array: [[f64; 4]; 4] = [[0.0, 1.0, 2.0, 3.0], [1.0, 0.0, 0.0, 4.0], [2.0, 0.0, 0.0, 5.0], [3.0, 4.0, 5.0, 6.0]];
-    let size: usize = input_array.len();
+    let mut input_array: Vec<Vec<f64>> = initialiser::initialise_input_array(context.array_size);
+    let size: usize = usize::from(context.array_size);
 
     println!("Input array before relaxing:");
     for n in 0..size {
@@ -42,10 +29,8 @@ pub fn relax() -> bool {
         steps_taken += 1;
 
         // Copy to a new array.
-        let mut new_array_to_relax: [[f64; 4]; 4] = [[0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]];
-        for n in 0..size {
-            new_array_to_relax[n] = input_array[n];
-        }
+        let mut new_array_to_relax: Vec<Vec<f64>> = Vec::with_capacity(size);
+        new_array_to_relax.extend(input_array);
 
         println!("Working array:");
         for n in 0..size {
@@ -54,9 +39,10 @@ pub fn relax() -> bool {
 
         for row in 1..size-1 {
             for column in 1..size-1 {
+                // TODO: E0382 below and again in line 45. Fix! <=== Work here.
                 let new_avg_value = utils::average_array(new_array_to_relax, row, column);
                 input_array[row][column] = new_avg_value;
-                let precision_reached_for_current_value: bool = utils::check_precision(correct_array, new_avg_value, row, column, target_precision);
+                let precision_reached_for_current_value: bool = utils::check_precision(context.correct_array, new_avg_value, row, column, context.target_precision);
                 if !precision_reached_for_current_value {
                     needs_another_iteration = true;
                 }

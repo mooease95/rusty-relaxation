@@ -1,9 +1,10 @@
 mod sequential_relaxer;
 mod relaxation_utils;
 mod initialiser;
-// mod relaxation_problem;
+mod relaxation_context;
 
 use std::env;
+use crate::relaxation_context::RelaxationContext;
 
 fn main() {
 
@@ -15,12 +16,15 @@ fn main() {
     let array_size: i64 = (&args[1]).parse().unwrap();
     let target_precision: f64 = (&args[2]).parse().unwrap();
 
-    let correct_array: Vec<Vec<i64>> = initialiser::initialise_array(array_size);
-    // TODO: Create a context struct. <=== WORK HERE!!!
+    let correct_array: Vec<Vec<i64>> = initialiser::initialise_correct_array(array_size);
+
+    let context = RelaxationContext {
+        array_size,
+        target_precision,
+        correct_array
+    };
 
     println!("Starting rusty relaxation.");
 
-    if sequential_relaxer::relax() {
-        println!("Managed to call sequential relaxer!");
-    }
+    sequential_relaxer::relax(context);
 }
