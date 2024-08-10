@@ -1,35 +1,40 @@
 
 // Assume equation is f(x,y) = x + y
-// TODO: Can I make the vector have f64?
-pub fn initialise_correct_array(array_size: i64) -> Vec<Vec<i64>> {
-    let mut correct_array: Vec<Vec<i64>> = Vec::with_capacity(usize::from(array_size));
+pub fn initialise_correct_array(array_size: usize) -> Vec<Vec<f64>> {
+    println!("array_size=[{}].", array_size);
+    let mut correct_array: Vec<Vec<f64>> = Vec::with_capacity(array_size);
+    println!("correct_array size=[{}].", correct_array.len());
     for i in 0..array_size {
+        let mut correct_array_column: Vec<f64> = Vec::with_capacity(array_size);
         for j in 0..array_size {
-            correct_array[i][j] = function(i, j);
+            correct_array_column.push(function(i, j));
         }
+        correct_array.push(correct_array_column);
     }
 
-    return correct_array;
+    correct_array
 }
 
-fn function(x: i64, y: i64) -> i64 {
+fn function(x: usize, y: usize) -> f64 {
     // f(x,y) = x + y
-    return x + y;
+    (x + y) as f64
 }
 
-pub fn initialise_input_array(array_size: i64) -> Vec<Vec<f64>> {
-    let mut input_array: Vec<Vec<f64>> = Vec::with_capacity(usize::from(array_size));
+pub fn initialise_input_array(array_size: usize) -> Vec<Vec<f64>> {
+    let mut input_array: Vec<Vec<f64>> = Vec::with_capacity(array_size);
     for i in 0..array_size {
+        let mut input_array_column: Vec<f64> = Vec::with_capacity(array_size);
         for j in 0..array_size {
             // Pad the border with the correct value.
             if i == 0 || j == 0 || i == array_size - 1 || j == array_size - 1 {
-                input_array[i][j] = function(i, j);
+                input_array_column.push(function(i, j));
             } else {
                 // All other values - values in the middle - should be 0.
-                input_array[i][j] = 0.0;
+                input_array_column.push(0.0);
             }
         }
+        input_array.push(input_array_column);
     }
 
-    return input_array;
+    input_array
 }
