@@ -3,22 +3,22 @@ use crate::relaxation_utils as utils;
 use crate::relaxation_context::RelaxationContext;
 use crate::initialiser;
 
-pub fn relax(context: RelaxationContext) -> bool {
-    println!("Starting to relax sequentially.");
-
-    println!("Correct array:");
-    for n in 0..context.array_size {
-        println!("{:?}", context.correct_array[n]);
+pub fn relax(context: RelaxationContext) -> (bool, isize) {
+    if context.debug {
+        println!("Correct array:");
+        for n in 0..context.array_size {
+            println!("{:?}", context.correct_array[n]);
+        }
     }
-
-    println!("Target precision=[{}].", context.target_precision);
 
     let mut input_array: Vec<Vec<f64>> = initialiser::initialise_input_array(context.array_size);
     let size: usize = context.array_size;
 
-    println!("Input array before relaxing:");
-    for n in 0..size {
-        println!("{:?}", input_array[n]);
+    if context.debug {
+        println!("Input array before relaxing:");
+        for n in 0..size {
+            println!("{:?}", input_array[n]);
+        }
     }
 
     let mut steps_taken: isize = 0;
@@ -32,9 +32,11 @@ pub fn relax(context: RelaxationContext) -> bool {
         let mut new_array_to_relax: Vec<Vec<f64>> = Vec::with_capacity(size);
         new_array_to_relax.extend(input_array.clone());
 
-        println!("Working array:");
-        for n in 0..size {
-            println!("{:?}", new_array_to_relax[n]); // This needs a :? because it's printing an array.
+        if context.debug {
+            println!("Working array:");
+            for n in 0..size {
+                println!("{:?}", new_array_to_relax[n]); // This needs a :? because it's printing an array.
+            }
         }
 
         for row in 1..size-1 {
@@ -49,11 +51,13 @@ pub fn relax(context: RelaxationContext) -> bool {
             }
         }
     }
-    println!("PRECISION REACHED FOR ALL!! Steps taken=[{}].", steps_taken);
 
-    println!("Input array after relaxing:");
-    for n in 0..size {
-        println!("{:?}", input_array[n]);
+    if context.debug {
+        println!("Input array after relaxing:");
+        for n in 0..size {
+            println!("{:?}", input_array[n]);
+        }
     }
-    return true;
+
+    (true, steps_taken)
 }

@@ -1,9 +1,7 @@
 
 // Assume equation is f(x,y) = x + y
 pub fn initialise_correct_array(array_size: usize) -> Vec<Vec<f64>> {
-    println!("array_size=[{}].", array_size);
     let mut correct_array: Vec<Vec<f64>> = Vec::with_capacity(array_size);
-    println!("correct_array size=[{}].", correct_array.len());
     for i in 0..array_size {
         let mut correct_array_column: Vec<f64> = Vec::with_capacity(array_size);
         for j in 0..array_size {
