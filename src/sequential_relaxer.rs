@@ -3,7 +3,7 @@ use crate::relaxation_utils as utils;
 use crate::relaxation_context::RelaxationContext;
 use crate::initialiser;
 
-pub fn relax(context: RelaxationContext) -> (bool, isize) {
+pub fn relax(context: &RelaxationContext) -> (bool, isize) {
     if context.debug {
         println!("Correct array:");
         for n in 0..context.array_size {
@@ -41,7 +41,6 @@ pub fn relax(context: RelaxationContext) -> (bool, isize) {
 
         for row in 1..size-1 {
             for column in 1..size-1 {
-                // TODO: E0382 below and again in line 45. Fix! <=== Work here.
                 let new_avg_value = utils::average_array(&new_array_to_relax, row, column);
                 input_array[row][column] = new_avg_value;
                 let precision_reached_for_current_value: bool = utils::check_precision(&context.correct_array, new_avg_value, row, column, context.target_precision);

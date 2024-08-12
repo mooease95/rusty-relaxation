@@ -2,6 +2,7 @@ mod sequential_relaxer;
 mod relaxation_utils;
 mod initialiser;
 mod relaxation_context;
+mod concurrent_relaxer;
 
 use std::env;
 use std::time::{Duration, SystemTime};
@@ -28,14 +29,26 @@ fn main() {
 
     println!("Starting rusty relaxation.");
     println!("Starting to relax sequentially.");
-    let duration_since_epoch_before: Duration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
-    let before_sequential: u128 = duration_since_epoch_before.as_nanos();
-    let (successful, steps_taken): (bool, isize) = sequential_relaxer::relax(context);
-    let duration_since_epoch_after: Duration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
-    let after_sequential: u128 = duration_since_epoch_after.as_nanos();
+    let duration_since_epoch_before_sequential: Duration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
+    let before_sequential: u128 = duration_since_epoch_before_sequential.as_nanos();
+    let (sequential_successful, sequential_steps_taken): (bool, isize) = sequential_relaxer::relax(&context);
+    let duration_since_epoch_after_sequential: Duration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
+    let after_sequential: u128 = duration_since_epoch_after_sequential.as_nanos();
 
-    if successful {
+    if sequential_successful {
         println!("Time taken for a [{}]x[{}] array to relax to a precision of [{}] sequentially = [{}] nanoseconds, number of steps taken = [{}].",
-                 array_size, array_size, target_precision, after_sequential - before_sequential, steps_taken);
+                 array_size, array_size, target_precision, after_sequential - before_sequential, sequential_steps_taken);
+    }
+
+    println!("Starting to relax concurrently.");
+    let duration_since_epoch_before_concurrent: Duration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
+    let before_concurrent: u128 = duration_since_epoch_before_concurrent.as_nanos();
+    let (concurrent_successful, concurrent_steps_taken): (bool, isize) = concurrent_relaxer::relax(&context);
+    let duration_since_epoch_after_concurrent: Duration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
+    let after_concurrent: u128 = duration_since_epoch_after_concurrent.as_nanos();
+
+    if concurrent_successful {
+        println!("Time taken for a [{}]x[{}] array to relax to a precision of [{}] concurrently = [{}] nanoseconds, number of steps taken = [{}].",
+                 array_size, array_size, target_precision, after_concurrent - before_concurrent, concurrent_steps_taken);
     }
 }
