@@ -3,7 +3,7 @@ use crate::relaxation_utils as utils;
 use crate::relaxation_context::RelaxationContext;
 use crate::initialiser;
 
-pub fn relax(context: &RelaxationContext) -> (bool, isize) {
+pub fn relax(context: &RelaxationContext) -> (bool, usize) {
     if context.debug {
         println!("Correct array:");
         for n in 0..context.array_size {
@@ -21,7 +21,7 @@ pub fn relax(context: &RelaxationContext) -> (bool, isize) {
         }
     }
 
-    let mut steps_taken: isize = 0;
+    let mut steps_taken: usize = 0;
 
     let mut needs_another_iteration: bool = true;
     while needs_another_iteration {
