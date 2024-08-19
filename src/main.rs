@@ -14,7 +14,8 @@ fn main() {
 
     let array_size: usize = (&args[1]).parse().unwrap();
     let target_precision: f64 = (&args[2]).parse().unwrap();
-    let debug: bool = (&args[3]).parse().unwrap();
+    let no_of_threads: usize = (&args[3]).parse().unwrap();
+    let debug: bool = (&args[4]).parse().unwrap();
 
     println!("array_size=[{}], target_precision=[{}].", array_size, target_precision);
 
@@ -24,6 +25,7 @@ fn main() {
         array_size,
         target_precision,
         correct_array,
+        no_of_threads,
         debug
     };
 
